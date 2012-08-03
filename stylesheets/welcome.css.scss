@@ -1,0 +1,28 @@
+// Place all the styles related to the Welcome controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.special {
+	color:#08C;
+	font-weight:bold;
+}
+#welcome-list {
+	padding:18px;
+	background-color:white;
+	float:left;
+	border:1px solid #888;
+}
+
+#start-demo {
+	text-align:center;
+}
+
+#demo1, #demo2{
+	width:400px;
+}
+
+#demo2-example {
+	background-color:black;
+	color:green;
+	overflow:auto;
+}
