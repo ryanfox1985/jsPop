@@ -51,7 +51,6 @@ $(document).ready(function () {
 			var ByteJSPopupOverlay = document.createElement("div"); // Background overlay.
 			var ByteJSPopupWrap = document.createElement("div"); // Popup itself.
 			var ByteJSPopupContent = document.createElement("div"); // Popup Content.
-			var ByteJSPopupClose = document.createElement("p"); // Popup close button.
 
 			/**
 				DOM elements attribute settings.
@@ -60,15 +59,12 @@ $(document).ready(function () {
 			$(ByteJSPopupWrap).attr("id", "ByteJSPopupWrap");
 			$(ByteJSPopupOverlay).attr("id", "ByteJSPopupOverlay");
 			$(ByteJSPopupContent).attr("id", "ByteJSPopupContent");
-			$(ByteJSPopupClose).attr("id", "ByteJSPopupClose");
 			$(ByteJSPopupWrap).attr("id", "ByteJSPopupWrap");
-			$(ByteJSPopupClose).html("x");
 			$(ByteJSPopup).hide();
 
 			/**
 				DOM elements appending.
 			*/
-			$(ByteJSPopupWrap).append(ByteJSPopupClose);
 			$(ByteJSPopupWrap).append(ByteJSPopupContent);
 			$(ByteJSPopup).append(ByteJSPopupOverlay);
 			$(ByteJSPopup).append(ByteJSPopupWrap);
@@ -84,9 +80,6 @@ $(document).ready(function () {
 				if (event.keyCode == 27) jsPop.close();
 			});
 			$(ByteJSPopupOverlay).click(function () {
-				jsPop.close();
-			});
-			$(ByteJSPopupClose).click(function () {
 				jsPop.close();
 			});
 
@@ -128,11 +121,13 @@ $(document).ready(function () {
 			};
 
 			/**
-				Popup dinamic center.
+				Popup dinamic center. Popup dynamic max-height to
+				display scroll.
 			*/
 			function centerPopup() {
 				$(ByteJSPopupWrap).css("left", $(window).width() / 2 - $(ByteJSPopupWrap).width() / 2);
 				$(ByteJSPopupWrap).css("top", $(window).height() / 3 - $(ByteJSPopupWrap).height() / 3);
+				$(ByteJSPopupContent).css("max-height", $(window).height() * 0.9);
 			};
 
 			/**
