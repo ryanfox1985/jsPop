@@ -1,5 +1,5 @@
 /*
- *	jsPop - Javascript Library v1.0
+ *	jsPop - Javascript Library v0.1.2b
  *	
  *	Copyright (c) 2012 Bytecrawl.com
  *
@@ -35,6 +35,7 @@ $(document).ready(function () {
 			var _submitting = false; // Prevent double form submit via ajax().
 			var _tShow = 80; // Default fadeIn time.
 			var _tHide = 80; // Default fadeOut time.
+			var EventLoad = document.createEvent('Event'); // Popup complete load event.
 
 			/**
 				Formatter custom styles.
@@ -84,6 +85,11 @@ $(document).ready(function () {
 			});
 
 			/**
+				Custom events initializing
+			*/
+			EventLoad.initEvent("jsPopLoad", false, false);
+
+			/**
 				Void function for empty callbacks.
 			*/
 			var noop = function () {};
@@ -107,7 +113,7 @@ $(document).ready(function () {
 				Before fadeIn, apply custom styling formatter().
 				@hack setTimeOut to center popup once fadeIn starts.
 				Once fadeIn complete, set _isOpen before callback, then
-				run callback.
+				run callback and trigger onload event.
 			*/
 			function show(ms, callback) {
 				var ms = ms || 0;
@@ -117,6 +123,7 @@ $(document).ready(function () {
 				$(ByteJSPopup).fadeIn(ms, function () {
 					_isOpen = true;
 					callback();
+					ByteJSPopup.dispatchEvent(EventLoad);
 				});
 			};
 
@@ -291,12 +298,15 @@ $(document).ready(function () {
 				close: function () {
 					close();
 				},
-				open: function () {
-					show(_tShow);
+				/**
+					Events
+				*/
+				onload: function (callback) {
+					$(ByteJSPopup).bind("jsPopLoad", callback);
 				}
 			};
 
-			return ( window.jsPop = jsPop);
+			return (window.jsPop = jsPop);
 
 		})();
 	})(window);
