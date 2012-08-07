@@ -35,7 +35,7 @@ $(document).ready(function () {
 			var _submitting = false; // Prevent double form submit via ajax().
 			var _tShow = 80; // Default fadeIn time.
 			var _tHide = 80; // Default fadeOut time.
-			var EventLoad = document.createEvent('Event'); // Popup complete load event.
+			var EventLoad = document.createEvent('Event');	// Popup complete load event.
 
 			/**
 				Formatter custom styles.
@@ -52,6 +52,7 @@ $(document).ready(function () {
 			var ByteJSPopupOverlay = document.createElement("div"); // Background overlay.
 			var ByteJSPopupWrap = document.createElement("div"); // Popup itself.
 			var ByteJSPopupContent = document.createElement("div"); // Popup Content.
+			var ByteJSPopupClose = document.createElement("p"); // Popup close button.
 
 			/**
 				DOM elements attribute settings.
@@ -60,12 +61,15 @@ $(document).ready(function () {
 			$(ByteJSPopupWrap).attr("id", "ByteJSPopupWrap");
 			$(ByteJSPopupOverlay).attr("id", "ByteJSPopupOverlay");
 			$(ByteJSPopupContent).attr("id", "ByteJSPopupContent");
+			$(ByteJSPopupClose).attr("id", "ByteJSPopupClose");
 			$(ByteJSPopupWrap).attr("id", "ByteJSPopupWrap");
 			$(ByteJSPopup).hide();
+			$(ByteJSPopupClose).html("x");
 
 			/**
 				DOM elements appending.
 			*/
+			$(ByteJSPopupWrap).append(ByteJSPopupClose);
 			$(ByteJSPopupWrap).append(ByteJSPopupContent);
 			$(ByteJSPopup).append(ByteJSPopupOverlay);
 			$(ByteJSPopup).append(ByteJSPopupWrap);
@@ -83,7 +87,10 @@ $(document).ready(function () {
 			$(ByteJSPopupOverlay).click(function () {
 				jsPop.close();
 			});
-
+			$(ByteJSPopupClose).click(function () { 	
+				jsPop.close();	  	
+			});
+			
 			/**
 				Custom events initializing
 			*/
@@ -301,12 +308,12 @@ $(document).ready(function () {
 				/**
 					Events
 				*/
-				onload: function (callback) {
-					$(ByteJSPopup).bind("jsPopLoad", callback);
+				onload: function(callback) {
+					$(ByteJSPopup).bind("jsPopLoad",callback);
 				}
 			};
 
-			return (window.jsPop = jsPop);
+			return ( window.jsPop = jsPop);
 
 		})();
 	})(window);
