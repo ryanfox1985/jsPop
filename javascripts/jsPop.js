@@ -46,6 +46,11 @@ $(document).ready(function () {
 			var _fHeight = 0;
 
 			/**
+				Global options
+			*/
+			var _gblCloseButton = false;
+
+			/**
 				DOM elements creation.Bytecrawl.
 			*/
 			var ByteJSPopup = document.createElement("div"); // Complete jsPop.
@@ -253,6 +258,14 @@ $(document).ready(function () {
 				Apply custom option settings before launching Popup.
 			*/
 			var formatter = function () {
+				/**
+					Global options
+				*/
+				if(!_gblCloseButton)
+					$(ByteJSPopupClose).hide();
+				else
+					$(ByteJSPopupClose).show();
+
 				// Padding settings.
 				if (_fPadding > 0) $(ByteJSPopupContent).css("padding", _fPadding);
 				else $(ByteJSPopupContent).css("padding", "");
@@ -282,9 +295,18 @@ $(document).ready(function () {
 			}
 
 			/**
+				Global options setter.
+			*/
+			var setGlobals = function(params) {
+				_gblCloseButton = params.closeButton || false; // Enable/Disable close button
+			}
+			/**
 				Public jsPop methods.
 			*/
 			var jsPop = {
+				/**
+					Content loading
+				*/
 				html: function (text, options) {
 					if (options) setFormatter(options);
 					html(text);
@@ -304,6 +326,12 @@ $(document).ready(function () {
 				},
 				close: function () {
 					close();
+				},
+				/**
+					Global configuration
+				*/
+				config: function(params) {
+					setGlobals(params);
 				},
 				/**
 					Events
