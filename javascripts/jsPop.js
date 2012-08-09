@@ -35,6 +35,10 @@ $(document).ready(function () {
 			var _submitting = false; // Prevent double form submit via ajax().
 			var _tShow = 80; // Default fadeIn time.
 			var _tHide = 80; // Default fadeOut time.
+
+			/**
+				Custom Events
+			*/
 			var EventLoad = document.createEvent('Event');	// Popup complete load event.
 
 			/**
@@ -259,7 +263,7 @@ $(document).ready(function () {
 			*/
 			var formatter = function () {
 				/**
-					Global options
+					Global options.
 				*/
 				if(!_gblCloseButton)
 					$(ByteJSPopupClose).hide();
@@ -279,10 +283,18 @@ $(document).ready(function () {
 					$(ByteJSPopupContent).children().css("height", "");
 				};
 
+				// Height settings.
+				if (_fHeight > 0) {
+					$(ByteJSPopupContent).children().css("height", _fHeight);
+				} else {
+					$(ByteJSPopupContent).children().css("height", "");
+				};
+
 				// Reset after setting applied.
 				_fSet = false;
 				_fPadding = 0;
 				_fWidth = 0;
+				_fHeight = 0;
 			}
 
 			/**
@@ -291,6 +303,7 @@ $(document).ready(function () {
 			var setFormatter = function (options) {
 				_fSet = true;
 				_fWidth = options.width;
+				_fHeight = options.height;
 				_fPadding = options.padding;
 			}
 
