@@ -50,3 +50,10 @@
 	color:#333; 	
 	border-radius:1px;  	
 }
+#ByteJSPopupLoading {
+	width:31px;
+	height:31px;
+	background-image: url("ajax-loader.gif");
+	background-size:contain;
+	background-repeat:none;
+}

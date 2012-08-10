@@ -1,5 +1,5 @@
 /*
- *	jsPop - Javascript Library v0.1.2b
+ *	jsPop - Javascript Library v0.1.3b
  *	
  *	Copyright (c) 2012 Bytecrawl.com
  *
@@ -29,6 +29,7 @@ $(document).ready(function () {
 			*/
 			var _isOpen = false; // Popup status.
 			var _isForm = false; // Current content belongs to a form.
+			var _interrupted = false; // Ajax interruption to prevent undesired popups.
 			var _tag = ""; // Store tag loading from _form when calling form();
 			var _form = ""; // Store form when calling form();
 			var _url = ""; // Current ajax loaded url, in case of ajax() just reload.
@@ -37,9 +38,12 @@ $(document).ready(function () {
 			var _tHide = 80; // Default fadeOut time.
 
 			/**
-				Custom Events
+				Custom Events.
 			*/
-			var EventLoad = document.createEvent('Event');	// Popup complete load event.
+			var _preventEvent = false; // Enable/Disable normal flow of dispatching events. Internal use.
+			var _jsPopLoadCallback = undefined;
+			var EventOnLoad = document.createEvent('Event'); // Popup every loaded popup event.
+			var EventLoad = document.createEvent('Event');	// Popup next loaded popup event.
 
 			/**
 				Formatter custom styles.
@@ -103,7 +107,8 @@ $(document).ready(function () {
 			/**
 				Custom events initializing
 			*/
-			EventLoad.initEvent("jsPopLoad", false, false);
+			EventOnLoad.initEvent("jsPopOnLoad", true, false);
+			EventLoad.initEvent("jsPopLoad", true, false);
 
 			/**
 				Void function for empty callbacks.
@@ -120,6 +125,7 @@ $(document).ready(function () {
 				var callback = callback || noop;
 				$(ByteJSPopup).fadeOut(ms, function () {
 					_isOpen = false;
+					if(!_preventEvent) _interrupted = true;
 					callback();
 				});
 			};
@@ -139,7 +145,12 @@ $(document).ready(function () {
 				$(ByteJSPopup).fadeIn(ms, function () {
 					_isOpen = true;
 					callback();
-					ByteJSPopup.dispatchEvent(EventLoad);
+					if (!_preventEvent) {
+						ByteJSPopup.dispatchEvent(EventOnLoad);
+						ByteJSPopup.dispatchEvent(EventLoad);
+						ByteJSPopup.removeEventListener("jsPopLoad", _jsPopLoadCallback);
+					}
+					_preventEvent = false;
 				});
 			};
 
@@ -151,6 +162,14 @@ $(document).ready(function () {
 				$(ByteJSPopupWrap).css("left", $(window).width() / 2 - $(ByteJSPopupWrap).width() / 2);
 				$(ByteJSPopupWrap).css("top", $(window).height() / 3 - $(ByteJSPopupWrap).height() / 3);
 				$(ByteJSPopupContent).css("max-height", $(window).height() * 0.9);
+			};
+
+			/**
+				Loader div with animated gif while ajax loading.
+			*/
+			function loader() {
+				_preventEvent = true;
+				jsPop.html('<div><div id="ByteJSPopupLoading"></div></div>',{padding:45});
 			};
 
 			/**
@@ -211,9 +230,17 @@ $(document).ready(function () {
 					});
 				} else {
 					_submitting = true;
-					$(ByteJSPopupContent).load(href, function () {
+					_interrupted = false;
+					loader();
+					var preloader = document.createElement("div");
+					$(preloader).load(href, function() {
 						_submitting = false;
-						show(_tShow);
+						if(!_interrupted) {
+							$(ByteJSPopupContent).empty();
+							$(ByteJSPopupContent).append(preloader);
+							preloader = undefined;
+							show(_tShow);
+						}
 					});
 				};
 			};
@@ -313,12 +340,13 @@ $(document).ready(function () {
 			var setGlobals = function(params) {
 				_gblCloseButton = params.closeButton || false; // Enable/Disable close button
 			}
+
 			/**
 				Public jsPop methods.
 			*/
 			var jsPop = {
 				/**
-					Content loading
+					Content loading.
 				*/
 				html: function (text, options) {
 					if (options) setFormatter(options);
@@ -341,16 +369,22 @@ $(document).ready(function () {
 					close();
 				},
 				/**
-					Global configuration
+					Global configuration.
 				*/
 				config: function(params) {
 					setGlobals(params);
 				},
 				/**
-					Events
+					Events.
+						onload	-> on each load.
+						load	-> after last load.
 				*/
 				onload: function(callback) {
-					$(ByteJSPopup).bind("jsPopLoad",callback);
+					ByteJSPopup.addEventListener("jsPopOnLoad", callback);
+				},
+				load: function(callback) {
+					_jsPopLoadCallback = callback;
+					ByteJSPopup.addEventListener("jsPopLoad", _jsPopLoadCallback);
 				}
 			};
 
