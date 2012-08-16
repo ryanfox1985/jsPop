@@ -42,10 +42,7 @@ $(document).ready(function () {
 				Custom Events.
 			*/
 			var _preventEvent = false; // Enable/Disable normal flow of dispatching events. Internal use.
-			var _jsPopLoadCallback = undefined;
-			var EventOnLoad = document.createEvent('Event'); // Popup every loaded popup event.
-			var EventLoad = document.createEvent('Event'); // Popup next loaded popup event.
-
+			
 			/**
 				Formatter custom styles.
 			*/
@@ -106,12 +103,6 @@ $(document).ready(function () {
 			});
 
 			/**
-				Custom events initializing
-			*/
-			EventOnLoad.initEvent("jsPopOnLoad", true, false);
-			EventLoad.initEvent("jsPopLoad", true, false);
-
-			/**
 				Void function for empty callbacks.
 			*/
 			var noop = function () {};
@@ -146,9 +137,9 @@ $(document).ready(function () {
 					_isOpen = true;
 					callback();
 					if (!_preventEvent) {
-						ByteJSPopup.dispatchEvent(EventOnLoad);
-						ByteJSPopup.dispatchEvent(EventLoad);
-						ByteJSPopup.removeEventListener("jsPopLoad", _jsPopLoadCallback);
+						$(ByteJSPopup).trigger("jsPopOnLoad");
+						$(ByteJSPopup).trigger("jsPopLoad");
+						$(ByteJSPopup).unbind("jsPopLoad");
 					};
 					_preventEvent = false;
 				});
@@ -273,7 +264,7 @@ $(document).ready(function () {
 				var callback = callback || noop;
 				if (!_preventEvent) _interrupted = true;
 				if (_submitting) {
-					ByteJSPopup.removeEventListener("jsPopLoad", _jsPopLoadCallback);
+					$(ByteJSPopup).unbind("jsPopLoad");
 				};
 				if (_isOpen) if (_isForm) {
 					hide(_tHide, function () {
@@ -387,11 +378,10 @@ $(document).ready(function () {
 						load	-> after last load.
 				*/
 				onload: function (callback) {
-					ByteJSPopup.addEventListener("jsPopOnLoad", callback);
+					$(ByteJSPopup).bind("jsPopOnLoad", callback);
 				},
 				load: function (callback) {
-					_jsPopLoadCallback = callback;
-					ByteJSPopup.addEventListener("jsPopLoad", _jsPopLoadCallback);
+					$(ByteJSPopup).bind("jsPopLoad", callback);
 				},
 				/**
 					Debug.
