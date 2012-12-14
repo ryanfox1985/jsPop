@@ -1,7 +1,8 @@
 <h1>jsPop</h1>
 
-jsPop is a javascript tool based on jQuery that provides overlayed boxes ( pop-ups ) to load contents on it.
+Go to the <a href="jspop.bytecrawl.com">Project page</a> and see jsPop in action.
 
+jsPop is a javascript tool based on jQuery that provides overlayed boxes ( pop-ups ) to load contents on it.
 
 I wrote this tool because the tools I knew to display overlayed pop-ups were focused on image gallery, like
 <a href="https://github.com/jackmoore/colorbox">Colorbox</a> or <a href="http://fancybox.net">fancyBox</a> do.
