@@ -1,6 +1,6 @@
 <h1>jsPop</h1>
 
-Go to the <a href="jspop.bytecrawl.com">Project page</a> and see jsPop in action.
+Go to the <a href="http://jspop.bytecrawl.com">Project page</a> and see jsPop in action.
 
 jsPop is a javascript tool based on jQuery that provides overlayed boxes ( pop-ups ) to load contents on it.
 
